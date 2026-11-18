@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Grandmaster Arena — Chess Tournament Registration &amp; Standings</title>
+    <meta
+      name="description"
+      content="Competitive chess tournament registration, live Swiss and Round Robin standings, and organizer administration."
+    />
+    <meta property="og:title" content="Grandmaster Arena" />
+    <meta
+      property="og:description"
+      content="Competitive chess tournament registration, live Swiss and Round Robin standings, and organizer administration."
+    />
+    <link rel="stylesheet" href="/styles.css" />
+    <script>
+      try {
+        var t = localStorage.getItem('ga_theme');
+        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <a href="/" class="brand-wordmark">
+          <span class="brand-mark"><i data-lucide="crown" style="width:18px;height:18px;"></i></span>
+          <span>Grandmaster Arena</span>
+        </a>
+
+        <nav class="nav-links" aria-label="Primary Navigation">
+          <a href="/" class="nav-link active">Overview</a>
+          <a href="/registration" class="nav-link">Register</a>
+          <a href="/result" class="nav-link">Results</a>
+          <a href="/admin" class="nav-link">Admin</a>
+        </nav>
+
+        <div class="topbar-actions">
+          <button
+            id="themeToggleBtn"
+            class="theme-toggle-btn"
+            type="button"
+            aria-label="Switch to light theme"
+            title="Switch to light theme"
+          >
+            <i data-lucide="sun" style="width:17px;height:17px;"></i>
+          </button>
+          <a href="/registration" class="btn btn-primary btn-sm topbar-desktop-cta">
+            <i data-lucide="swords" style="width:16px;height:16px;"></i>
+            <span>Enter Tournament</span>
+          </a>
+          <button
+            id="mobileMenuBtn"
+            class="mobile-menu-btn"
+            type="button"
+            aria-label="Toggle Menu"
+            aria-expanded="false"
+          >
+            <i data-lucide="menu" style="width:20px;height:20px;"></i>
+          </button>
+        </div>
+      </div>
+
+      <div id="mobileDrawer" class="mobile-drawer">
+        <a href="/" class="nav-link active">Overview</a>
+        <a href="/registration" class="nav-link">Register</a>
+        <a href="/result" class="nav-link">Results</a>
+        <a href="/admin" class="nav-link">Admin</a>
+        <a href="/registration" class="btn btn-primary btn-sm">Enter Tournament</a>
+      </div>
+    </header>
+
+    <main class="container">
+      <!-- Hero Split -->
+      <section class="hero-split">
+        <div class="glass-panel-lime hero-copy">
+          <div class="meta-line">
+            <span>Swiss &amp; Round Robin</span>
+            <span class="meta-sep">·</span>
+            <span>Elo-Verified Brackets</span>
+            <span class="meta-sep">·</span>
+            <span>Live Standings</span>
+          </div>
+          <h1 class="hero-title">Precision chess brackets built for serious play.</h1>
+          <div style="display:flex;flex-wrap:wrap;gap:14px;padding-top:6px;">
+            <a href="/registration" class="btn btn-primary">
+              <i data-lucide="user-plus" style="width:17px;height:17px;"></i>
+              <span>Register Entry</span>
+            </a>
+            <a href="/result" class="btn btn-secondary">
+              <i data-lucide="bar-chart-3" style="width:17px;height:17px;"></i>
+              <span>View Results</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="glass-panel hero-media">
+          <img
+            src="/assets/images/hero_chess_arena_1794793072167.jpg"
+            alt="Championship chess arena board in frosted obsidian glass hall"
+            referrerpolicy="no-referrer"
+            onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+          />
+          <div class="media-fallback">
+            <i data-lucide="shield" style="width:44px;height:44px;color:var(--accent-lime);"></i>
+            <span>Championship Arena</span>
+          </div>
+          <div class="hero-media-scrim">
+            <div class="meta-line" style="color:#e2e8f0;">
+              <span>Season 2026 Circuit</span>
+              <span class="meta-sep">·</span>
+              <span>Automated Pairings &amp; Standings</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4-Column KPI Strip -->
+      <section aria-label="Circuit Statistics" class="kpi-strip">
+        <div class="glass-panel kpi-card">
+          <span class="kpi-label">Active Events</span>
+          <span id="kpiEvents" class="kpi-value">--</span>
+        </div>
+        <div class="glass-panel kpi-card">
+          <span class="kpi-label">Confirmed Players</span>
+          <span id="kpiPlayers" class="kpi-value">--</span>
+        </div>
+        <div class="glass-panel kpi-card">
+          <span class="kpi-label">Peak Elo Registered</span>
+          <span id="kpiPeakElo" class="kpi-value">--</span>
+        </div>
+        <div class="glass-panel kpi-card">
+          <span class="kpi-label">Recorded Games</span>
+          <span id="kpiMatches" class="kpi-value">--</span>
+        </div>
+      </section>
+
+      <!-- Tournaments Directory -->
+      <section class="section-space">
+        <div
+          style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:24px;"
+        >
+          <div>
+            <h2 class="section-title">Tournament Schedule</h2>
+          </div>
+
+          <div class="segmented-group" role="tablist" aria-label="Filter tournaments">
+            <button type="button" class="segmented-btn active" data-filter="all">All Events</button>
+            <button type="button" class="segmented-btn" data-filter="Open">Open Registration</button>
+            <button type="button" class="segmented-btn" data-filter="Completed">Completed</button>
+          </div>
+        </div>
+
+        <div id="homeTournamentGrid" class="grid-2">
+          <div class="glass-panel" style="padding:26px;">
+            <div class="skeleton" style="width:65%;margin-bottom:14px;"></div>
+            <div class="skeleton" style="width:90%;margin-bottom:10px;"></div>
+            <div class="skeleton" style="width:45%;"></div>
+          </div>
+          <div class="glass-panel" style="padding:26px;">
+            <div class="skeleton" style="width:60%;margin-bottom:14px;"></div>
+            <div class="skeleton" style="width:85%;margin-bottom:10px;"></div>
+            <div class="skeleton" style="width:50%;"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="/vendor/lucide.min.js"></script>
+    <script src="/shared.js"></script>
+    <script src="/home.js"></script>
+  </body>
+</html>

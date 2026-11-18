@@ -1,0 +1,8 @@
+{
+  "name": "Grandmaster Arena",
+  "description": "Chess tournament registration, administration, standings, and private admin draw platform.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Player Registration — Grandmaster Arena</title>
+    <meta
+      name="description"
+      content="Register for active chess tournaments with username, peak Elo, platform handle, and event-specific arbiter fields."
+    />
+    <link rel="stylesheet" href="/styles.css" />
+    <script>
+      try {
+        var t = localStorage.getItem('ga_theme');
+        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <a href="/" class="brand-wordmark">
+          <span class="brand-mark"><i data-lucide="crown" style="width:18px;height:18px;"></i></span>
+          <span>Grandmaster Arena</span>
+        </a>
+
+        <nav class="nav-links" aria-label="Primary Navigation">
+          <a href="/" class="nav-link">Overview</a>
+          <a href="/registration" class="nav-link active">Register</a>
+          <a href="/result" class="nav-link">Results</a>
+          <a href="/admin" class="nav-link">Admin</a>
+        </nav>
+
+        <div class="topbar-actions">
+          <button
+            id="themeToggleBtn"
+            class="theme-toggle-btn"
+            type="button"
+            aria-label="Switch to light theme"
+            title="Switch to light theme"
+          >
+            <i data-lucide="sun" style="width:17px;height:17px;"></i>
+          </button>
+          <a href="/result" class="btn btn-secondary btn-sm topbar-desktop-cta">
+            <i data-lucide="trophy" style="width:16px;height:16px;"></i>
+            <span>Live Standings</span>
+          </a>
+          <button
+            id="mobileMenuBtn"
+            class="mobile-menu-btn"
+            type="button"
+            aria-label="Toggle Menu"
+            aria-expanded="false"
+          >
+            <i data-lucide="menu" style="width:20px;height:20px;"></i>
+          </button>
+        </div>
+      </div>
+
+      <div id="mobileDrawer" class="mobile-drawer">
+        <a href="/" class="nav-link">Overview</a>
+        <a href="/registration" class="nav-link active">Register</a>
+        <a href="/result" class="nav-link">Results</a>
+        <a href="/admin" class="nav-link">Admin</a>
+      </div>
+    </header>
+
+    <main class="container section-space">
+      <div style="margin-bottom:28px;">
+        <h1 class="section-title" style="font-size:clamp(1.85rem,3vw,2.6rem);">
+          Tournament Entry Registration
+        </h1>
+      </div>
+
+      <div class="layout-sidebar">
+        <!-- Main Column: Tournament Select + Dynamic Form -->
+        <div style="display:flex;flex-direction:column;gap:24px;">
+          <section class="glass-panel" style="padding:26px;">
+            <div class="field-group" style="margin-bottom:18px;">
+              <label for="tournamentSelect" class="field-label">
+                <span>Select Tournament</span>
+                <span class="field-req">Required</span>
+              </label>
+              <select id="tournamentSelect" class="select">
+                <option value="">Loading tournaments...</option>
+              </select>
+            </div>
+
+            <div id="tournamentBrief" class="surface-inset" style="padding:18px;display:none;">
+              <div
+                style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px;"
+              >
+                <h2 id="briefTitle" class="card-title"></h2>
+                <span id="briefStatus"></span>
+              </div>
+              <div id="briefMeta" class="meta-line" style="margin-bottom:10px;"></div>
+              <p id="briefRules" class="muted" style="margin:0;font-size:0.88rem;"></p>
+            </div>
+          </section>
+
+          <section id="formCard" class="glass-panel-lime" style="padding:28px;">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;">
+              <i data-lucide="clipboard-check" style="width:22px;height:22px;color:var(--accent-lime-text);"></i>
+              <h2 class="card-title">Player Entry Form</h2>
+            </div>
+
+            <form id="registrationForm" style="display:flex;flex-direction:column;gap:16px;">
+              <div class="grid-2">
+                <div class="field-group">
+                  <label for="regUsername" class="field-label">
+                    <span>Chess Username / Handle</span>
+                    <span class="field-req">Required</span>
+                  </label>
+                  <input
+                    id="regUsername"
+                    name="username"
+                    type="text"
+                    class="input"
+                    required
+                    minlength="2"
+                    maxlength="32"
+                    placeholder="e.g. MagnusVanguard"
+                  />
+                </div>
+
+                <div class="field-group">
+                  <label for="regPlatform" class="field-label">
+                    <span>Primary Platform</span>
+                    <span class="field-req">Required</span>
+                  </label>
+                  <select id="regPlatform" name="platform" class="select" required>
+                    <option value="Chess.com">Chess.com</option>
+                    <option value="Lichess">Lichess</option>
+                    <option value="OTB / FIDE">OTB / FIDE</option>
+                    <option value="USCF / National">USCF / National</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="grid-2">
+                <div class="field-group">
+                  <label for="regPeakElo" class="field-label">
+                    <span>Peak Elo Rating</span>
+                    <span class="field-req">Required</span>
+                  </label>
+                  <input
+                    id="regPeakElo"
+                    name="peakElo"
+                    type="number"
+                    class="input num"
+                    required
+                    min="100"
+                    max="3500"
+                    placeholder="e.g. 2140"
+                  />
+                  <span id="eloRangeHint" class="field-help">Allowed rating range: 100–3500</span>
+                </div>
+
+                <div class="field-group">
+                  <label for="regCurrentElo" class="field-label">
+                    <span>Current Elo Rating</span>
+                    <span class="field-help">Optional if same</span>
+                  </label>
+                  <input
+                    id="regCurrentElo"
+                    name="currentElo"
+                    type="number"
+                    class="input num"
+                    min="100"
+                    max="3500"
+                    placeholder="e.g. 2085"
+                  />
+                </div>
+              </div>
+
+              <div id="conditionalIdentityFields" class="grid-2"></div>
+              <div id="dynamicCustomFields" style="display:flex;flex-direction:column;gap:14px;"></div>
+
+              <div
+                id="formErrorBanner"
+                style="display:none;padding:12px 14px;border:2px solid var(--status-danger);background:rgba(239,68,68,0.12);border-radius:6px;color:var(--error-text);font-size:0.9rem;"
+              ></div>
+
+              <div style="display:flex;align-items:center;justify-content:flex-end;gap:12px;flex-wrap:wrap;padding-top:6px;">
+                <button id="submitRegBtn" type="submit" class="btn btn-primary">
+                  <i data-lucide="send" style="width:16px;height:16px;"></i>
+                  <span>Submit Registration</span>
+                </button>
+              </div>
+            </form>
+
+            <!-- Confirmation Receipt -->
+            <div id="receiptBox" style="display:none;margin-top:20px;padding:20px;" class="surface-inset">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;">
+                <div style="display:flex;align-items:center;gap:8px;color:var(--accent-lime-text);font-weight:700;">
+                  <i data-lucide="badge-check" style="width:20px;height:20px;"></i>
+                  <span>Registration Recorded</span>
+                </div>
+                <span id="receiptStatus"></span>
+              </div>
+              <div class="meta-line" style="margin-bottom:12px;">
+                <span>Confirmation Code:</span>
+                <strong id="receiptCode" class="num" style="color:var(--accent-lime-text);font-size:1.05rem;"></strong>
+                <button type="button" id="copyCodeBtn" class="btn btn-secondary btn-sm">
+                  <i data-lucide="copy" style="width:14px;height:14px;"></i>
+                  <span>Copy</span>
+                </button>
+              </div>
+              <p id="receiptSummary" class="muted" style="margin:0;font-size:0.9rem;"></p>
+            </div>
+          </section>
+        </div>
+
+        <!-- Secondary Column: Receipt Lookup + Confirmed Roster -->
+        <aside style="display:flex;flex-direction:column;gap:24px;">
+          <section class="glass-panel" style="padding:24px;">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+              <i data-lucide="search" style="width:18px;height:18px;color:var(--accent-sky);"></i>
+              <h2 class="card-title">Verify Entry Status</h2>
+            </div>
+            <form id="lookupForm" style="display:flex;gap:10px;">
+              <input
+                id="lookupQuery"
+                type="text"
+                class="input"
+                placeholder="Confirmation code or username"
+                required
+              />
+              <button type="submit" class="btn btn-secondary">Check</button>
+            </form>
+            <div id="lookupResult" style="margin-top:14px;font-size:0.88rem;"></div>
+          </section>
+
+          <section class="glass-panel" style="padding:24px;">
+            <div
+              style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;"
+            >
+              <div style="display:flex;align-items:center;gap:8px;">
+                <i data-lucide="users" style="width:18px;height:18px;color:var(--accent-lime-text);"></i>
+                <h2 class="card-title">Confirmed Roster</h2>
+              </div>
+              <span id="rosterCount" class="num muted" style="font-size:0.85rem;">0 players</span>
+            </div>
+
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Seed</th>
+                    <th>Player</th>
+                    <th class="right">Peak Elo</th>
+                  </tr>
+                </thead>
+                <tbody id="publicRosterBody">
+                  <tr>
+                    <td colspan="3" class="muted">Select a tournament to view confirmed entrants.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </aside>
+      </div>
+    </main>
+
+    <script src="/vendor/lucide.min.js"></script>
+    <script src="/shared.js"></script>
+    <script src="/registration-page.js"></script>
+  </body>
+</html>
